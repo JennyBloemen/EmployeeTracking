@@ -1,9 +1,27 @@
 const inquirer = require("inquirer");
-const dbinstance = require("./db/index.js");
-const mysql = reqiure("mysql2");
-const connection = require("./connection");
+// const dbinstance = require("./db/index.js");
+const mysql = require("mysql2");
+// const connection = require("./connection");
 const db = require("./db/index.js");
+const mysql = require("mysql2");
+const cTable = require("console.table");
 
+const connection = mysql.createConnection(
+  {
+    host: "localhost",
+    user: "root",
+    password: "Password",
+    database: "employee_db",
+  },
+  console.log("Connected to database.")
+);
+
+connection.connect((err) => {
+  if (err) throw err;
+  loadPrompts();
+});
+
+// Initial questions prompt
 function loadPrompts() {
   inquirer
     .prompt([
@@ -81,3 +99,36 @@ function loadPrompts() {
 }
 
 //write database action functions
+//function to view all departments
+viewDepartments = () => {
+  connection.query("SELECT * FROM department", (err, result) => {
+    if (err) throw err;
+    cTable(result);
+    loadPrompts();
+  });
+};
+
+// addDepartment(); => {}
+
+// function to view all roles
+viewRoles = () => {
+  connection.query("SELECT * FROM roles", (err, result) => {
+    if (err) throw err;
+    cTable(result);
+    loadPrompts();
+  });
+};
+
+// addRole = () => {}
+
+//function to view all employees
+viewAllEmployees = () => {
+  connection.query("SELECT * FROM employee", (err, result) => {
+    if (err) throw err;
+    cTable(result);
+    loadPrompts();
+  });
+};
+// addEmployee = () => {}
+
+// updateEmployee = () => {}
