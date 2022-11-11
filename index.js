@@ -48,7 +48,7 @@ initialPrompt = () => {
           "Update employee roll",
           "Quit",
         ],
-        // loop: false,
+        loop: false,
       },
     ])
     .then((data) => {
@@ -62,16 +62,16 @@ initialPrompt = () => {
         case "View all roles":
           viewRoles();
           break;
-        case "add_role":
+        case "Add role":
           addRole();
           break;
-        case "all_employees":
+        case "View all employees":
           viewAllEmployees();
           break;
-        case "add_employee":
+        case "Add employee":
           addEmployee();
           break;
-        case "update_employee":
+        case "Update employee roll":
           updateEmployee();
           break;
         case "exit":
@@ -134,14 +134,17 @@ viewRoles = () => {
 
 // // addRole = () => {}
 
-// //function to view all employees
-// viewAllEmployees = () => {
-//   connection.query("SELECT * FROM employee", (err, results) => {
-//     if (err) throw err;
-//     cTable(results);
-//     loadPrompts();
-//   });
-// };
+//function to view all employees
+viewAllEmployees = () => {
+  connection.query(
+    "SELECT employee.id, employee.first_name, employee.last_name, employee.role_id FROM employee",
+    (err, result) => {
+      if (err) throw err;
+      console.table(result);
+      initialPrompt();
+    }
+  );
+};
 // // addEmployee = () => {}
 
 // // updateEmployee = () => {}
