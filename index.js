@@ -1,10 +1,18 @@
 const inquirer = require("inquirer");
-// const dbinstance = require("./db/index.js");
-const mysql = require("mysql2");
-// const connection = require("./connection");
-const db = require("./db/index.js");
 const mysql = require("mysql2");
 const cTable = require("console.table");
+// const connection = require("./connection");
+// const dbinstance = require("./db/index.js");
+const db = require("./db/index.js");
+
+const { isBuffer } = require("util");
+const express = require("express");
+
+const app = express();
+const PORT = process.env.PORT || 3001;
+
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 
 const connection = mysql.createConnection(
   {
@@ -12,68 +20,46 @@ const connection = mysql.createConnection(
     user: "root",
     password: "Password",
     database: "employee_db",
+    // multipleStatements: true,
   },
   console.log("Connected to database.")
 );
 
 connection.connect((err) => {
   if (err) throw err;
-  loadPrompts();
+  initialPrompt();
 });
 
 // Initial questions prompt
-function loadPrompts() {
+initialPrompt = () => {
   inquirer
     .prompt([
       {
         type: "list",
-        name: "choices",
+        name: "request",
         message: "Welcome, what would you like to do?",
         choices: [
-          {
-            name: "View all departments",
-            value: "all_departments",
-          },
-          {
-            name: "Add department",
-            value: "add_department",
-          },
-          {
-            name: "View all roles",
-            value: "all_roles",
-          },
-          {
-            name: "Add role",
-            value: "add_role",
-          },
-          {
-            name: "View all employees",
-            value: "all_employees",
-          },
-          {
-            name: "Add employee",
-            value: "add_employee",
-          },
-          {
-            name: "Update employee roll",
-            value: "update_employee",
-          },
-          {
-            name: "Exit",
-            value: "exit",
-          },
+          "View all departments",
+          "Add department",
+          "View all roles",
+          "Add role",
+          "View all employees",
+          "Add employee",
+          "Update employee roll",
+          "Quit",
         ],
+        // loop: false,
       },
     ])
-    .then((res) => {
-      switch (res.choices) {
-        case "all_departments":
+    .then((data) => {
+      switch (data.request) {
+        case "View all departments":
           viewDepartments();
           break;
-        case "add_department":
+        case "Add department":
           addDepartment();
           break;
-        case "all_role":
+        case "View all roles":
           viewRoles();
           break;
         case "add_role":
@@ -91,44 +77,104 @@ function loadPrompts() {
         case "exit":
           db.end();
           break;
-        default:
-          db.end();
-          return;
       }
     });
-}
+};
 
-//write database action functions
-//function to view all departments
+// //write database action functions
+// //function to view all departments
+// let department = [];
+
 viewDepartments = () => {
-  connection.query("SELECT * FROM department", (err, result) => {
-    if (err) throw err;
-    cTable(result);
-    loadPrompts();
-  });
+  connection.query(
+    "SELECT department.id, department.department_name FROM department",
+    (err, result) => {
+      if (err) throw err;
+      console.table(result);
+      initialPrompt();
+    }
+  );
 };
 
-// addDepartment(); => {}
+addDepartment = () => {
+  inquirer
+  .prompt([
+    {
+      type: "input",
+      name: "addDept",
+      message: "What department would you like to add?",
+      validate: addDept => {
+        if(addDept) {
+          return true;
+        } else {
+          console.log('Please add department');
+          return false;
+        }
+      }
+    }
+  ])
+    .then(answer => {
+      const sql = `INSERT INTO department (department_name) VALUES(?)`;
+      connection.query(sql. answer.addDepart, (err,result) => {
+        if(err) throw
+      })
+    })
+  }
+// // function to view all roles
+// viewRoles = () => {
+//   connection.query("SELECT * FROM roles", (err, results) => {
+//     if (err) throw err;
+//     cTable(results);
+//     loadPrompts();
+//   });
+// };
 
-// function to view all roles
-viewRoles = () => {
-  connection.query("SELECT * FROM roles", (err, result) => {
-    if (err) throw err;
-    cTable(result);
-    loadPrompts();
-  });
-};
+// // addRole = () => {}
 
-// addRole = () => {}
+// //function to view all employees
+// viewAllEmployees = () => {
+//   connection.query("SELECT * FROM employee", (err, results) => {
+//     if (err) throw err;
+//     cTable(results);
+//     loadPrompts();
+//   });
+// };
+// // addEmployee = () => {}
 
-//function to view all employees
-viewAllEmployees = () => {
-  connection.query("SELECT * FROM employee", (err, result) => {
-    if (err) throw err;
-    cTable(result);
-    loadPrompts();
-  });
-};
-// addEmployee = () => {}
+// // updateEmployee = () => {}
 
-// updateEmployee = () => {}
+//   {
+//     name: "View all departments",
+//     value: "all_departments",
+//   },
+//   {
+//     name: "Add department",
+//     value: "add_department",
+//   },
+//   {
+//     name: "View all roles",
+//     value: "all_roles",
+//   },
+//   {
+//     name: "Add role",
+//     value: "add_role",
+//   },
+//   {
+//     name: "View all employees",
+//     value: "all_employees",
+//   },
+//   {
+//     name: "Add employee",
+//     value: "add_employee",
+//   },
+//   {
+//     name: "Update employee roll",
+//     value: "update_employee",
+//   },
+//   {
+//     name: "Exit",
+//     value: "exit",
+//   },
+// ],
+//   },
+// ])
