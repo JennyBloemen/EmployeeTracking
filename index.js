@@ -81,10 +81,7 @@ initialPrompt = () => {
     });
 };
 
-// //write database action functions
 // //function to view all departments
-// let department = [];
-
 viewDepartments = () => {
   connection.query(
     "SELECT department.id, department.department_name FROM department",
@@ -125,11 +122,14 @@ addDepartment = () => {
 };
 // function to view all roles
 viewRoles = () => {
-  connection.query("SELECT * FROM roles", (err, results) => {
-    if (err) throw err;
-    cTable(results);
-    loadPrompts();
-  });
+  connection.query(
+    "SELECT role.id, role.title, role.salary, role.salary FROM role",
+    (err, result) => {
+      if (err) throw err;
+      console.table(result);
+      initialPrompt();
+    }
+  );
 };
 
 // // addRole = () => {}
@@ -145,39 +145,3 @@ viewRoles = () => {
 // // addEmployee = () => {}
 
 // // updateEmployee = () => {}
-
-//   {
-//     name: "View all departments",
-//     value: "all_departments",
-//   },
-//   {
-//     name: "Add department",
-//     value: "add_department",
-//   },
-//   {
-//     name: "View all roles",
-//     value: "all_roles",
-//   },
-//   {
-//     name: "Add role",
-//     value: "add_role",
-//   },
-//   {
-//     name: "View all employees",
-//     value: "all_employees",
-//   },
-//   {
-//     name: "Add employee",
-//     value: "add_employee",
-//   },
-//   {
-//     name: "Update employee roll",
-//     value: "update_employee",
-//   },
-//   {
-//     name: "Exit",
-//     value: "exit",
-//   },
-// ],
-//   },
-// ])
