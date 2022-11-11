@@ -1,8 +1,7 @@
 const inquirer = require("inquirer");
 const mysql = require("mysql2");
 const cTable = require("console.table");
-// const connection = require("./connection");
-// const dbinstance = require("./db/index.js");
+
 const db = require("./db/index.js");
 
 const { isBuffer } = require("util");
@@ -14,13 +13,13 @@ const PORT = process.env.PORT || 3001;
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
+//code block to create a connection to the db.
 const connection = mysql.createConnection(
   {
     host: "localhost",
     user: "root",
     password: "Password",
     database: "employee_db",
-    // multipleStatements: true,
   },
   console.log("Connected to database.")
 );
@@ -81,28 +80,6 @@ initialPrompt = () => {
     });
 };
 
-// continueQuestion = () => {   need to ask about best way to do this.
-//   inquirer
-//       .prompt([
-//         {
-//           type: "list",
-//           name: "continue",
-//           message: "What's next?",
-//           choices: [
-//             "Add more data",
-//             "Return to main menu",
-//           ],
-//           loop: false,
-//         },
-//       ])
-//       .then((date) => {
-//         switch (data.request) {
-//           case "Add more data":
-
-//         }
-//       })
-
-// }
 // //function to view all departments
 viewDepartments = () => {
   connection.query(
@@ -115,6 +92,7 @@ viewDepartments = () => {
   );
 };
 
+// code block to add department
 addDepartment = () => {
   inquirer
     .prompt([
@@ -136,12 +114,12 @@ addDepartment = () => {
       let sql = `INSERT INTO department (department_name) VALUES("${res.department_name}")`;
       connection.query(sql, (err, res) => {
         if (err) throw err;
-        console.log(res.department_name + ` Successfully added!`); ///need to figure out what goes here to grab the last dep added
-        // would like to add if would you like to add another department
+        console.log(" Department successfully added!");
         initialPrompt();
       });
     });
 };
+
 // function to view all roles
 viewRoles = () => {
   connection.query(
