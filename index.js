@@ -98,36 +98,39 @@ viewDepartments = () => {
 
 addDepartment = () => {
   inquirer
-  .prompt([
-    {
-      type: "input",
-      name: "addDept",
-      message: "What department would you like to add?",
-      validate: addDept => {
-        if(addDept) {
-          return true;
-        } else {
-          console.log('Please add department');
-          return false;
-        }
-      }
-    }
-  ])
-    .then(answer => {
-      const sql = `INSERT INTO department (department_name) VALUES(?)`;
-      connection.query(sql. answer.addDepart, (err,result) => {
-        if(err) throw
-      })
-    })
-  }
-// // function to view all roles
-// viewRoles = () => {
-//   connection.query("SELECT * FROM roles", (err, results) => {
-//     if (err) throw err;
-//     cTable(results);
-//     loadPrompts();
-//   });
-// };
+    .prompt([
+      {
+        type: "input",
+        name: "department_name",
+        message: "What department would you like to add?",
+        validate: (addDept) => {
+          if (addDept) {
+            return true;
+          } else {
+            console.log("Please add department");
+            return false;
+          }
+        },
+      },
+    ])
+    .then((res) => {
+      let sql = `INSERT INTO department (department_name) VALUES("${res.department_name}")`;
+      connection.query(sql, (err, res) => {
+        if (err) throw err;
+        console.log(`${res.department_name} Successfully added!`); ///need to figure out what goes here to grab the last dep added
+        // would like to add if would you like to add another department
+        initialPrompt();
+      });
+    });
+};
+// function to view all roles
+viewRoles = () => {
+  connection.query("SELECT * FROM roles", (err, results) => {
+    if (err) throw err;
+    cTable(results);
+    loadPrompts();
+  });
+};
 
 // // addRole = () => {}
 
