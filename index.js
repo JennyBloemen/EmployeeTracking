@@ -211,7 +211,7 @@ addEmployee = () => {
       .prompt([
         {
           type: "input",
-          name: "fist_name",
+          name: "first_name",
           message: "Enter employee's first name:",
           validate: (first_name) => {
             if (first_name) {
@@ -238,8 +238,11 @@ addEmployee = () => {
         {
           type: "list",
           name: "role_id",
-          message: "Enter role id for this employee:",
-          choices: result.map((role) => role.title + " " + role.id),
+          message: "Select role id for this employee:",
+          choices: result.map((role) => ({
+            name: role.title + " " + role.id,
+            value: role.id,
+          })),
           validate: (title) => {
             if (title) {
               return true;
