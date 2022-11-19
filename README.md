@@ -37,7 +37,7 @@ THEN I am prompted to select an employee to update and their new role and this i
   </ul>
 
 <h3>Video of Application</h3>
-<img src="./assets/EmployeeTrackingWalkthrough.webm"width="640" height="360"/>
+<img src="./assets/EmployeeTrackingWalkthrough.gif"width="640" height="360"/>
 <br>
 <h3>Tools</h3>
 <ul>
